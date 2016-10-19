@@ -25,17 +25,17 @@ I have provided the plugin and the server to run it.
 
 # Server Options
 
-Enviroment variables control the options for the server.
+Edit config.json to and edit it to your liking
 
-BOT_TOKEN: The token for the discord bot. ***Required***
+botToken: The token for the discord bot. ***Required***
 
-PEER_PORT: The port for the peerJS server (Default: 9000).
+peerPort: The port for the peerJS server (Default: 9000).
 
-EXPRESS_PORT: Port for websockets and express server. (Default: 9001).
+expressPort: Port for websockets and express server. (Default: 9001).
 
-KEY: Path to TLS key file. ***Required***
+key: Path to TLS key file. ***Required***
 
-CERT: Path to TLS cert file. ***Required***
+cert: Path to TLS cert file. ***Required***
 
 # Client config
 
