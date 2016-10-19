@@ -19,13 +19,13 @@ I have provided the plugin and the server to run it.
 1. Run server.js with the options of your choice.
 2. Download Better Discord and install.
 3. Install the screenShare.plugin.js into %appdata%/BetterDiscord/Plugins and enable it.
-4. Also put a file named ws.js into the plugins folder for websockets to work correctly.
-5. Create a discord bot and add it to chat
+4. Install ReconnectingWebSockets into a file named ws.js in the plugins folder.
+5. Create a discord bot and add it to chat.
 6. Use start and stop to control screenshare.
 
 # Server Options
 
-Edit config.json to and edit it to your liking
+Edit config.json to your liking
 
 botToken: The token for the discord bot. ***Required***
 
