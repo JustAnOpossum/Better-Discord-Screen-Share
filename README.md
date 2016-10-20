@@ -16,12 +16,12 @@ I have provided the plugin and the server to run it.
 # How to use
 
 1. Extract server folder into a folder of your choice
-2. Run NPM install
-3. Run server.js
-4. Download Better Discord and install.
-5. Extract the client folder into %appdata%/BetterDiscord/Plugins
-6. Install ReconnectingWebSockets into a file named ws.js in the plugins folder.
-7. Create a discord bot and add it to chat.
+2. Run npm install
+3. Create a discord bot and add it to chat.
+4. Customise serverConfig.json
+5. Run server.js
+6. Download Better Discord and install.
+7. Extract the client folder into %appdata%/BetterDiscord/Plugins
 8. Use start and stop to control screenshare in chat.
 
 # Server Options
