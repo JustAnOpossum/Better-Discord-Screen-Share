@@ -50,6 +50,7 @@ expressPort: The port for the express server
 # Upcoming Features
 
 * Autoupdate
+* Better video placement
 * Webcam Support
 * Chat detection
 
