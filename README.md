@@ -1,6 +1,6 @@
 # Better Discord Screen Sharing
 
-This is a plugin for Better Discord that lets you share your screen simalar to Skype. It uses webRTC to transmit the video (so it might not be good for a large volume of people). One person can share at a time and certan users can be made admin. There are more config options I can make as I go along I can add them.
+This is a plugin for Better Discord that lets you share your screen simalar to Skype. It uses webRTC to transmit the video (so it might not be good for a large volume of people). And if it dosen't work or weird bugs happen then please open a issue here so I can correct it.
 
 I have provided the plugin and the server to run it.
 
@@ -16,12 +16,14 @@ I have provided the plugin and the server to run it.
 
 # How to use
 
-1. Run server.js with the options of your choice.
-2. Download Better Discord and install.
-3. Install the screenShare.plugin.js into %appdata%/BetterDiscord/Plugins and enable it.
-4. Install ReconnectingWebSockets into a file named ws.js in the plugins folder.
-5. Create a discord bot and add it to chat.
-6. Use start and stop to control screenshare.
+1. Extract server folder into a folder of your choice
+2. Run NPM install
+3. Run server.js
+4. Download Better Discord and install.
+5. Extract the client folder into %appdata%/BetterDiscord/Plugins
+6. Install ReconnectingWebSockets into a file named ws.js in the plugins folder.
+7. Create a discord bot and add it to chat.
+8. Use start and stop to control screenshare in chat.
 
 # Server Options
 
