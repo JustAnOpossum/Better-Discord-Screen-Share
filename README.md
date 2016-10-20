@@ -12,7 +12,6 @@ I have provided the plugin and the server to run it.
 * A place to run the server that can be accessed from the internet.
 * [Discord bot](https://discordapp.com/developers/applications/) to handle screenshare.
 * Valid TLS certificate for TLS support. (If you want free valid certs check out [letsencrypt](https://certbot.eff.org/))
-* [Reconnecting Web Sockets](https://github.com/joewalnes/reconnecting-websocket)
 
 # How to use
 
@@ -54,3 +53,23 @@ expressPort: The port for the express server
 * Disconnect detection
 * Webcam Support
 * Chat detection
+
+# Libraries Used
+
+* [Better Discord](https://github.com/Jiiks/BetterDiscordApp)
+* [BetterAPI](https://github.com/Bluscream/BetterDiscord-Plugins-and-Themes/blob/master/src/plugins/0_BetterAPI.plugin.js)
+* [Reconnecting WebSockets](https://github.com/joewalnes/reconnecting-websocket)
+* [DiscordIO](https://github.com/izy521/discord.io)
+* [PeerJS](http://peerjs.com/)
+
+# Licence
+
+MIT License
+
+Copyright (c) 2016 ConnorTheFox
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
