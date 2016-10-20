@@ -51,6 +51,6 @@ expressPort: The port for the express server
 
 * Autoupdate
 * Better video placement
+* Disconnect detection
 * Webcam Support
 * Chat detection
-
