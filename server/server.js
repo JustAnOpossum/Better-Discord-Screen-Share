@@ -30,6 +30,10 @@ let currentScreenUser //Current User that is sharing his/her screen
 
 bot.on('ready', function() {})
 
+bot.on('disconnect', function(){
+  bot.connect()
+})
+
 bot.on('message', function(user, userID, channelID, message, event) {
     currentScreenUser = user //sets it to user that sent message
     currentChannel = channelID //gets channel id
