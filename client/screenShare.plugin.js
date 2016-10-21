@@ -10,7 +10,7 @@ var isShare //If someone is sharing
 var currentCall //Current call
 
 var fs = require('fs')
-var config = JSON.parse(fs.readFileSync('config.json', 'utf8')) //load config
+var config = JSON.parse(fs.readFileSync(process.env.APPDATA + '\\BetterDiscord\\Plugins\\config.json', 'utf8')) //load config
 
 var peerPort = config.peerPort || 9000
 var wsPort = config.wsPort || '9001'
