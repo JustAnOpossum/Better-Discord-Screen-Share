@@ -4,6 +4,8 @@ This is a plugin for Better Discord that lets you share your screen simalar to S
 
 I have provided the plugin and the server to run it.
 
+DISCLAMER: This is untested on OSX or Linux so I don't know if the paths would work if it was run on those.
+
 ![Example:](https://s16.postimg.org/jp7ptckj9/Picture.png)
 
 # Requirements
