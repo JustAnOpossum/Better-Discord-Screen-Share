@@ -10,7 +10,7 @@ var isShare //If someone is sharing
 var currentCall //Current call
 
 var process = require('process')
-var path = process.env.APPDATA + '\\BetterDiscord\\Plugins\\' || process.env.HOME + '/BetterDiscord/Plugins/'
+var path = process.env.APPDATA + '\\BetterDiscord\\plugins\\' || process.env.HOME + '/BetterDiscord/plugins/'
 
 var fs = require('fs')
 var config = JSON.parse(fs.readFileSync(path + 'config.json', 'utf8')) //load config
