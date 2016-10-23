@@ -9,8 +9,11 @@ var peer //peerjs object
 var isShare //If someone is sharing
 var currentCall //Current call
 
+var process = require('process')
+var path = process.env.APPDATA + '\\BetterDiscord\\Plugins\\' || process.env.HOME + '/BetterDiscord/Plugins/'
+
 var fs = require('fs')
-var config = JSON.parse(fs.readFileSync(process.env.APPDATA + '\\BetterDiscord\\Plugins\\config.json', 'utf8')) //load config
+var config = JSON.parse(fs.readFileSync(path + 'config.json', 'utf8')) //load config
 
 var peerPort = config.peerPort || 9000
 var wsPort = config.wsPort || '9001'
@@ -22,7 +25,7 @@ if (!config.domain) {
 }
 
 screenShare.prototype.start = function() {
-    var reconnect = require(process.env.APPDATA + '\\BetterDiscord\\Plugins\\ws.js') //load reconnecing websockets
+    var reconnect = require(path + 'ws.js') //load reconnecing websockets
     var orig = this //Can call from inside function
     var s = document.createElement("script")
     s.type = "text/javascript"
