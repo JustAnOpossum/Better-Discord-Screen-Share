@@ -22,13 +22,15 @@ DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 
 # If you Don't Have A Certificate
 
-Install the commaind line tool
+Install the commaind line tool.
 
 ```
 npm install -g letsencrypt-cli@2.x
 ```
 
-Run this command in the server directory
+Run this command in the server directory.
+
+By running this command you agree to the Lets Encrypt Terms and Conditions found [here](https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf)
 
 
 ```
