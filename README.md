@@ -1,6 +1,6 @@
 # Better Discord Screen Sharing
 
-This is a plugin for Better Discord that lets you share your screen simalar to Skype. It uses webRTC to transmit the video (so it might not be good for a large volume of people). And if it dosen't work or weird bugs happen then please open a issue here so I can correct it.
+This is a plugin for Better Discord that lets you share your screen. It uses webRTC to transmit the video (so it might not be good for a large volume of people). And if it dosen't work or weird bugs happen then please open a issue here so I can correct it.
 
 I have provided the plugin and the server to run it.
 
