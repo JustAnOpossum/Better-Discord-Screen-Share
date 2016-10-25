@@ -8,23 +8,53 @@ DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 
 ![Example:](https://s16.postimg.org/jp7ptckj9/Picture.png)
 
-# Requirements
+# Client Requirements
 
 * [Better Discord](https://github.com/Jiiks/BetterDiscordApp)
-* A place to run the server that can be accessed from the internet.
-* [Discord bot](https://discordapp.com/developers/applications/) to handle screenshare.
-* Valid TLS certificate for TLS support. (If you want free valid certs check out [CertBot](https://certbot.eff.org/))
 
-# How to use
+# Server Requirements
 
-1. Extract server folder into a folder of your choice
+* [NodeJS](https://nodejs.org/en/download/) Use V4 LTS since there are bugs with V6
+* Ability to port forward
+* [Discord bot](https://discordapp.com/developers/applications/) to handle screenshare in chat.
+* Valid TLS certificate.
+* Domain name (If you don't have one then use [NoIP](https://www.noip.com/))
+
+# If you Don't Have A Certificate
+
+Install the commaind line tool
+
+```
+npm install -g letsencrypt-cli@2.x
+```
+
+Run this command in the server directory
+
+
+```
+letsencrypt certonly --agree-tos --email YOUREMAILHERE --standalone --domains DNS_NAME_HERE --server https://acme-v01.api.letsencrypt.org/directory --config-dir certs --tls-sni-01-port 443
+```
+
+The files should be in certs/live/yourdoamin
+
+Key: privkey.pem
+
+Cert: cert.pem
+
+# How to Set up the Server
+
+1. Extract server folder
 2. Run npm install
 3. Create a discord bot and add it to chat.
 4. Customise serverConfig.json
 5. Run server.js
-6. Download Better Discord and install.
-7. Extract the client folder into %appdata%/BetterDiscord/Plugins
-8. Use "start" and "stop" to control screenshare in chat.
+
+# How to Set up the Plugin
+
+1. Download Better Discord and install.
+2. Extract the client folder into %appdata%\BetterDiscord\plugins
+3. Enable plugin in Better Discord
+4. Use "start" and "stop" to control screenshare in chat.
 
 # Server Options
 
@@ -44,7 +74,7 @@ cert: Path to TLS cert file. ***Required***
 
 Edit the variables in the top of the plugin.
 
-domain: IP or TLD of the server
+domain: Domain Name of the server
 
 peerPort: Port for the peerjs server (Default: 9000)
 
@@ -64,6 +94,7 @@ wsPort: Port for the http server and websocket server (Default: 9001)
 * [Reconnecting WebSockets](https://github.com/joewalnes/reconnecting-websocket)
 * [DiscordIO](https://github.com/izy521/discord.io)
 * [PeerJS](http://peerjs.com/)
+* [Letsencrypt CLI](https://github.com/Daplie/letsencrypt-cli)
 
 # Licence
 
