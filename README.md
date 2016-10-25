@@ -4,7 +4,7 @@ This is a plugin for Better Discord that lets you share your screen simalar to S
 
 I have provided the plugin and the server to run it.
 
-DISCLAMER: This is untested on OSX so I do not know if it would work.
+DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 
 ![Example:](https://s16.postimg.org/jp7ptckj9/Picture.png)
 
@@ -42,19 +42,20 @@ cert: Path to TLS cert file. ***Required***
 
 # Client config
 
-Domain: IP or DNS name of the server.
+Edit the variables in the top of the plugin.
 
-peerPort: The Peerjs server port.
+domain: IP or TLD of the server
 
-expressPort: The port for the express server
+peerPort: Port for the peerjs server (Default: 9000)
+
+wsPort: Port for the http server and websocket server (Default: 9001)
 
 # Upcoming Features
 
-* Autoupdate
+* Better Autoupdate
 * Better video placement
 * Disconnect detection
 * Webcam Support
-* Chat detection
 
 # Libraries Used
 
