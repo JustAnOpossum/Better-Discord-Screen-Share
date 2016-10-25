@@ -13,7 +13,7 @@ DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 * [Better Discord](https://github.com/Jiiks/BetterDiscordApp)
 * A place to run the server that can be accessed from the internet.
 * [Discord bot](https://discordapp.com/developers/applications/) to handle screenshare.
-* Valid TLS certificate for TLS support. (If you want free valid certs check out [letsencrypt](https://certbot.eff.org/))
+* Valid TLS certificate for TLS support. (If you want free valid certs check out [CertBot](https://certbot.eff.org/))
 
 # How to use
 
@@ -24,7 +24,7 @@ DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 5. Run server.js
 6. Download Better Discord and install.
 7. Extract the client folder into %appdata%/BetterDiscord/Plugins
-8. Use start and stop to control screenshare in chat.
+8. Use "start" and "stop" to control screenshare in chat.
 
 # Server Options
 
