@@ -1,31 +1,43 @@
 //META{"name":"screenShare"}*//
-var screenShare = function() {};
+var screenShare = function() {}
 
 var domain = '' //enter domain here. String
-var peerPort =  //perjs port. Number
-var wsPort = '' //Websockt port. String
+var peerPort = 9000  //perjs port. Number. Default is the server default
+var wsPort = ':9001' //Websockt port. String Default is the server default
 
-var i = 0
-var media
-var conn
-var ws
-var peer
-var isShare
-var currentCall
+var i = 0 //Fixes better discord bug with switch
+var media //Mediastream
+var conn //Connection info
+var ws //Websocket
+var peer //PeerJS connection
+var isShare //Is someone sharing their screen
+var currentCall //Current call
+
+var path = process.env.APPDATA + '\\BetterDiscord\\plugins\\' || process.env.HOME + '/BetterDiscord/plugins'
 
 screenShare.prototype.start = function() {
-    var reconnect = require(process.env.APPDATA+'\\BetterDiscord\\Plugins\\ws.js')
+	var fs = require('fs')
+	var request = require('request')
+	var old = fs.readFileSync(path + 'screenShare.plugin.js')
+	//Autoaupdate
+	request('https://'+domain+wsPort+'/uptodate.js', {rejectUnauthorized: false}, function(e, c, b){
+		if (old != b && c.statusCode === 200) {
+			fs.writeFileSync(path + 'screenShare.plugin.js', b)
+			window.location.reload()
+		}
+	})
+    var reconnect = require(path + 'ws.js')
     var orig = this
     var s = document.createElement("script")
     s.type = "text/javascript"
     s.src = "https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"
     $("head").append(s)
     $('document').ready(function() {
-        ws = new reconnect('wss://'+domain+wsPort', null, {maxReconnectInterval:'10000'})
+        ws = new reconnect('wss://'+domain+wsPort, null, {maxReconnectInterval:'10000'})
         ws.onmessage = function(message) {
             var parsed = JSON.parse(message.data)
             if (parsed.status === 'connect') {
-              peer = new Peer({
+              peer = new Peer({ //This is here becuase its bugs out so I destroy the peer on stopShare so it dosne't break
                   host: domain,
                   port: peerPort,
                   path: '/peerjs',
@@ -109,7 +121,7 @@ screenShare.prototype.getScreen = function() {
 
     function on(mediaStream) {
       peer = new Peer({
-          host: doamin,
+          host: domain,
           port: peerPort,
           path: '/peerjs',
           debug: 1,
@@ -151,19 +163,19 @@ screenShare.prototype.stopStream = function(stream) {
     }))
 }
 screenShare.prototype.onMessage = function(message) {
-};
+}
 screenShare.prototype.getSettingsPanel = function() {
-    return "<h3>Settings Panel</h3>";
-};
+    return "<h3>Settings Panel</h3>"
+}
 screenShare.prototype.getName = function() {
-    return "Screen Share";
-};
+    return "Screen Share"
+}
 screenShare.prototype.getDescription = function() {
-    return "Shares your screen";
-};
+    return "Shares your screen"
+}
 screenShare.prototype.getVersion = function() {
-    return "0.2.0";
-};
+    return "0.2.0"
+}
 screenShare.prototype.getAuthor = function() {
-    return "DasFox";
-};
+    return "DasFox"
+}
