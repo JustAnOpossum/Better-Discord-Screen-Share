@@ -5,7 +5,6 @@ var domain = '' //enter domain here. String
 var peerPort = 9000  //perjs port. Number. Default is the server default
 var wsPort = ':9001' //Websockt port. String Default is the server default
 
-<<<<<<< HEAD
 var i = 0 //Fixes better discord bug with switch
 var media //Mediastream
 var conn //Connection info
@@ -13,18 +12,10 @@ var ws //Websocket
 var peer //PeerJS connection
 var isShare //Is someone sharing their screen
 var currentCall //Current call
-=======
-var process = require('process')
-var path = process.env.APPDATA + '\\BetterDiscord\\plugins\\' || process.env.HOME + '/BetterDiscord/plugins/'
-
-var fs = require('fs')
-var config = JSON.parse(fs.readFileSync(path + 'config.json', 'utf8')) //load config
->>>>>>> origin/master
 
 var path = process.env.APPDATA + '\\BetterDiscord\\plugins\\' || process.env.HOME + '/BetterDiscord/plugins'
 
 screenShare.prototype.start = function() {
-<<<<<<< HEAD
 	var fs = require('fs')
 	var request = require('request')
 	var old = fs.readFileSync(path + 'screenShare.plugin.js')
@@ -37,10 +28,6 @@ screenShare.prototype.start = function() {
 	})
     var reconnect = require(path + 'ws.js')
     var orig = this
-=======
-    var reconnect = require(path + 'ws.js') //load reconnecing websockets
-    var orig = this //Can call from inside function
->>>>>>> origin/master
     var s = document.createElement("script")
     s.type = "text/javascript"
     s.src = "https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"
@@ -190,9 +177,6 @@ screenShare.prototype.getVersion = function() {
     return "0.2.0"
 }
 screenShare.prototype.getAuthor = function() {
-<<<<<<< HEAD
     return "DasFox"
-=======
-    return "ConnorTheFox"
->>>>>>> origin/master
 }
+ 
