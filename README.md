@@ -28,13 +28,15 @@ Install the commaind line tool.
 npm install -g letsencrypt-cli@2.x
 ```
 
-Run this command in the server directory.
+Open port 443
+
+Run this command in the server directory. Put in your domain and email address
 
 By running this command you agree to the Lets Encrypt Terms and Conditions found [here](https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf)
 
 
 ```
-letsencrypt certonly --agree-tos --email YOUREMAILHERE --standalone --domains DNS_NAME_HERE --server https://acme-v01.api.letsencrypt.org/directory --config-dir certs --tls-sni-01-port 443
+letsencrypt certonly --agree-tos --email YOUREMAILHERE --standalone --domains DOMAIN_NAME --server https://acme-v01.api.letsencrypt.org/directory --config-dir certs --tls-sni-01-port 443
 ```
 
 The files should be in certs/live/yourdoamin
