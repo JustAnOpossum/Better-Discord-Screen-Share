@@ -20,7 +20,7 @@ DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 * Valid TLS certificate.
 * Domain name (If you don't have one then use [NoIP](https://www.noip.com/))
 
-# If you Don't Have A Certificate
+# If you Don't Have A TLS Certificate
 
 Install the commaind line tool.
 
@@ -30,7 +30,9 @@ npm install -g letsencrypt-cli@2.x
 
 Open port 443
 
-Run this command in the server directory. Put in your domain and email address
+Run this command in the server directory. Put in your domain and email address.
+
+Depending on the speed of your computer it could take a couple of minutes.
 
 By running this command you agree to the Lets Encrypt Terms and Conditions found [here](https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf)
 
