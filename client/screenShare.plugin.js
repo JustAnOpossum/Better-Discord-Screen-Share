@@ -3,7 +3,7 @@ var screenShare = function() {}
 
 var domain = '' //enter domain here. String
 var peerPort = 9000  //perjs port. Number. Default is the server default
-var wsPort = ':9001' //Websockt port. String Default is the server default
+var wsPort = ':9001' //Websockt port. String Default is the server defaultt
 
 var i = 0 //Fixes better discord bug with switch
 var media //Mediastream
@@ -12,10 +12,12 @@ var ws //Websocket
 var peer //PeerJS connection
 var isShare //Is someone sharing their screen
 var currentCall //Current call
+var username
 
 var path = process.env.APPDATA + '\\BetterDiscord\\plugins\\' || process.env.HOME + '/BetterDiscord/plugins'
 
 screenShare.prototype.start = function() {
+	$('.header-toolbar').prepend('<button id="sscontrol" type="button" style="background-image:url(\'https://thetechiefox.com:9001/icon.png\');background-repeat:no-repeat"></button>')
 	var fs = require('fs')
 	var request = require('request')
 	var old = fs.readFileSync(path + 'screenShare.plugin.js')
@@ -34,9 +36,16 @@ screenShare.prototype.start = function() {
     $("head").append(s)
     $('document').ready(function() {
         ws = new reconnect('wss://'+domain+wsPort, null, {maxReconnectInterval:'10000'})
+				$('#sscontrol').click(function(){
+					ws.send(JSON.stringify({
+							status: 'buttonClick',
+							username: $('.username').text()
+					}))
+				})
         ws.onmessage = function(message) {
             var parsed = JSON.parse(message.data)
             if (parsed.status === 'connect') {
+							username = parsed.username
               peer = new Peer({ //This is here becuase its bugs out so I destroy the peer on stopShare so it dosne't break
                   host: domain,
                   port: peerPort,
@@ -69,15 +78,11 @@ screenShare.prototype.start = function() {
                 isShare = false
                 $('.hereisthevideo').remove()
                 peer.destroy()
+								media.getVideoTracks()[0].stop()
             }
-            if (parsed.status === 'findStart' && parsed.userId === BetterAPI.getOwnID()) {
-              isShare = true
-              orig.getScreen()
-            }
-            if (parsed.status === 'findStop' && parsed.userId === BetterAPI.getOwnID()) {
-              isShare = false
-              orig.stopStream()
-            }
+						if (parsed.status === 'getPeer') {
+							orig.getScreen()
+						}
         }
     })
 };
@@ -86,7 +91,17 @@ screenShare.prototype.unload = function() {};
 screenShare.prototype.stop = function() {};
 screenShare.prototype.onSwitch = function() {
     if (i === 1) {
+				if ($('#sscontrol').html() != "") {
+					$('.header-toolbar').prepend('<button id="sscontrol" type="button" style="background-image:url(\'https://thetechiefox.com:9001/icon.png\');background-repeat:no-repeat"></button>')
+					$('#sscontrol').click(function(){
+						ws.send(JSON.stringify({
+								status: 'buttonClick',
+								username: $('.username').text()
+						}))
+					})
+				}
         if (isShare === true) {
+						$('.hereisthevideo').prepend(username + ' is sharing their screen')
             $(".message-text").last().append("<video class='hereisthevideo' autoplay controls muted style='width:100%;height:100%'src=" + URL.createObjectURL(media) + ">")
         }
         i = 0
@@ -139,12 +154,14 @@ screenShare.prototype.getScreen = function() {
       peer.on('open', function(){
         ws.send(JSON.stringify({
             status: 'startShare',
-            peerId: peer.id
+            peerId: peer.id,
+						username: $('.username').text()
         }))
         peer.on('connection', function(connection) {
             peer.call(connection.peer, mediaStream)
         })
         $(".message-text").last().append("<video class='hereisthevideo' autoplay controls muted style='width:100%;height:100%'src=" + URL.createObjectURL(media) + ">")
+				isShare = true
       })
         media = mediaStream
     }
@@ -174,9 +191,8 @@ screenShare.prototype.getDescription = function() {
     return "Shares your screen"
 }
 screenShare.prototype.getVersion = function() {
-    return "0.2.0"
+    return "0.3.0"
 }
 screenShare.prototype.getAuthor = function() {
     return "DasFox"
 }
- 
