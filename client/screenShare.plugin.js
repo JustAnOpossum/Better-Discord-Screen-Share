@@ -85,10 +85,11 @@ screenShare.prototype.start = function() {
 						}
         }
     })
-};
-screenShare.prototype.load = function() {};
-screenShare.prototype.unload = function() {};
-screenShare.prototype.stop = function() {};
+}
+
+screenShare.prototype.load = function() {}
+screenShare.prototype.unload = function() {}
+screenShare.prototype.stop = function() {}
 screenShare.prototype.onSwitch = function() {
     if (i === 1) {
 				if ($('#sscontrol').html() != "") {
@@ -108,8 +109,9 @@ screenShare.prototype.onSwitch = function() {
     } else {
         i = 1
     }
-};
-screenShare.prototype.observer = function(e) {};
+}
+
+screenShare.prototype.observer = function(e) {}
 screenShare.prototype.getScreen = function() {
     const {
         desktopCapturer
@@ -170,7 +172,8 @@ screenShare.prototype.getScreen = function() {
         console.log(e)
     }
 
-};
+}
+
 screenShare.prototype.stopStream = function(stream) {
     media.getVideoTracks()[0].stop()
     $('.hereisthevideo').remove()
@@ -196,3 +199,7 @@ screenShare.prototype.getVersion = function() {
 screenShare.prototype.getAuthor = function() {
     return "DasFox"
 }
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> 328b8f71ac8037244960a40bdf94a2bb946d656c

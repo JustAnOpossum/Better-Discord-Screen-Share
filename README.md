@@ -1,6 +1,6 @@
 # Better Discord Screen Sharing
 
-This is a plugin for Better Discord that lets you share your screen simalar to Skype. It uses webRTC to transmit the video (so it might not be good for a large volume of people). And if it dosen't work or weird bugs happen then please open a issue here so I can correct it.
+This is a plugin for Better Discord that lets you share your screen. It uses webRTC to transmit the video (so it might not be good for a large volume of people). And if it dosen't work or weird bugs happen then please open a issue here so I can correct it.
 
 I have provided the plugin and the server to run it.
 
@@ -20,7 +20,7 @@ DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 * Valid TLS certificate.
 * Domain name (If you don't have one then use [NoIP](https://www.noip.com/))
 
-# If you Don't Have A Certificate
+# If you Don't Have A TLS Certificate
 
 Install the commaind line tool.
 
@@ -28,13 +28,17 @@ Install the commaind line tool.
 npm install -g letsencrypt-cli@2.x
 ```
 
-Run this command in the server directory.
+Open port 443
+
+Run this command in the server directory. Put in your domain and email address.
+
+Depending on the speed of your computer it could take a couple of minutes.
 
 By running this command you agree to the Lets Encrypt Terms and Conditions found [here](https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf)
 
 
 ```
-letsencrypt certonly --agree-tos --email YOUREMAILHERE --standalone --domains DNS_NAME_HERE --server https://acme-v01.api.letsencrypt.org/directory --config-dir certs --tls-sni-01-port 443
+letsencrypt certonly --agree-tos --email YOUREMAILHERE --standalone --domains DOMAIN_NAME --server https://acme-v01.api.letsencrypt.org/directory --config-dir certs --tls-sni-01-port 443
 ```
 
 The files should be in certs/live/yourdoamin

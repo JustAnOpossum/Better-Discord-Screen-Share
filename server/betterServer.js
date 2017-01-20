@@ -6,7 +6,7 @@ const path = require('path')
 const Discord = require('discord.io')
 const config = JSON.parse(fs.readFileSync('serverConfig.json', 'utf8'))
 if (!config.botToken) {
-  throw "Please enter bot token in config"
+  throw new Error("Please enter bot token in config")
 }
 const bot = new Discord.Client({
     token: config.botToken,
@@ -20,7 +20,7 @@ const WebSocketServer = require('ws').Server
 let peerPort = config.peerPort || 9000
 let expressPort = config.expressPort || 9001
 if (!config.key || !config.crt) {
-  throw "Please enter all TLS certs in the config"
+  throw new Error("Please enter all TLS certs in the config")
 }
 let key = fs.readFileSync(config.key, 'utf8')
 let cert = fs.readFileSync(config.crt, 'utf8')
