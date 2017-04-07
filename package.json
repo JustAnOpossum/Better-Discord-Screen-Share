@@ -1,0 +1,19 @@
+{
+  "name": "bdscreenshare",
+  "version": "0.4.0",
+  "description": "Better Discord Screen Share",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ConnorTheFox",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "discord.io": "^2.5.1",
+    "kurento-client": "^6.6.0",
+    "minimist": "^1.2.0",
+    "primus": "^7.0.0",
+    "ws": "^2.2.3"
+  }
+}

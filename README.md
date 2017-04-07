@@ -1,8 +1,6 @@
 # Better Discord Screen Sharing
 
-This is a plugin for Better Discord that lets you share your screen. It uses webRTC to transmit the video (so it might not be good for a large volume of people). And if it dosen't work or weird bugs happen then please open a issue here so I can correct it.
-
-I have provided the plugin and the server to run it.
+This is a plugin and server for the plugin for Better Discord that lets you share your screen. It needs ubuntu for the server.
 
 DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 
@@ -14,99 +12,140 @@ DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 
 # Server Requirements
 
-* [NodeJS](https://nodejs.org/en/download/) Use V4 LTS since there are bugs with V6
-* Ability to port forward
-* [Discord bot](https://discordapp.com/developers/applications/) to handle screenshare in chat.
+* [NodeJS](https://nodejs.org/en/download/)
+* Nginx
+* Linux server with Ubuntu
+* [Discord bot](https://discordapp.com/developers/applications/) to send who is sharing screen to the channel
 * Valid TLS certificate.
 * Domain name (If you don't have one then use [NoIP](https://www.noip.com/))
+* [Kurento Media Server](https://doc-kurento.readthedocs.io/en/stable/what_is_kurento.html)
 
 # If you Don't Have A TLS Certificate
 
-Install the commaind line tool.
+Install [Certbot](https://certbot.eff.org/#ubuntuxenial-nginx) and follow the prompts for getting a certificate
 
+# Set up Kurento Server
+
+This is the server that relays the video to the users.
+
+To use this you NEED to be on ubuntu since Kurento only supports ubuntu.
+
+Replace "Version" with whatever version of ubuntu you are on.
+
+14.04 - trusty
+
+16.04 - xenial
+
+16.10 - yakkety
+
+```bash
+echo "deb http://ubuntu.kurento.org VERSION kms6" | sudo tee /etc/apt/sources.list.d/kurento.list
+wget -O - http://ubuntu.kurento.org/kurento.gpg.key | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install kurento-media-server-6.0
+sudo service kurento-media-server-6.0 start
 ```
-npm install -g letsencrypt-cli@2.x
+
+# Setting Up Nginx
+
+1. Add this block to your current site or a new sites, edit the alias for /screenshare to point to where the html folder is.
+
+```Nginx
+location /ssws {
+    proxy_pass http://localhost:8006;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_buffering off;
+    proxy_connect_timeout 43200000;
+    proxy_read_timeout 43200000;
+    proxy_send_timeout 43200000;
+}
+
+location /screenshare {
+    alias /path/to/html/folder;
+    add_header 'Access-Control-Allow-Origin' '*';
+}
 ```
 
-Open port 443
+2. Enable TLS
 
-Run this command in the server directory. Put in your domain and email address.
+# Set Up The Server
 
-Depending on the speed of your computer it could take a couple of minutes.
-
-By running this command you agree to the Lets Encrypt Terms and Conditions found [here](https://letsencrypt.org/documents/LE-SA-v1.0.1-July-27-2015.pdf)
-
-
-```
-letsencrypt certonly --agree-tos --email YOUREMAILHERE --standalone --domains DOMAIN_NAME --server https://acme-v01.api.letsencrypt.org/directory --config-dir certs --tls-sni-01-port 443
-```
-
-The files should be in certs/live/yourdoamin
-
-Key: privkey.pem
-
-Cert: cert.pem
-
-# How to Set up the Server
-
-1. Extract server folder
-2. Run npm install
-3. Create a discord bot and add it to chat.
-4. Customise serverConfig.json
-5. Run server.js
+1. Run npm install in the screenshare directory.
+2. Run npm start. (And with optional command args)
 
 # How to Set up the Plugin
 
 1. Download Better Discord and install.
-2. Extract the client folder into %appdata%\BetterDiscord\plugins
-3. Enable plugin in Better Discord
-4. Use "start" and "stop" to control screenshare in chat.
+2. Extract screenShare.plugin.js to %appdata%\BetterDiscord\Plugins (or ~/Library/Preferences/BetterDiscord/plugins for OSX)
+3. Enable plugin in Better Discord.
+4. Use the button in the top right corner to start and stop screen share.
 
 # Server Options
 
-Edit config.json to your liking
+## Command Like Options
 
-botToken: The token for the discord bot. ***Required***
+Run the server with these options to change the options.
 
-peerPort: The port for the peerJS server (Default: 9000).
+### Required
 
-expressPort: Port for websockets and express server. (Default: 9001).
+chatID: The chat is for the group the bot is going to be in.
 
-key: Path to TLS key file. ***Required***
+```node
+node main.js --chatID=123456
+```
 
-cert: Path to TLS cert file. ***Required***
+
+### Optional
+
+kurento: A ws url to the kurento media server. Default: ws://localhost/kurento:8888
+```node
+node main.js --kurento=ws://example.com/kurento:8888
+```
+
+## Environment Vars
+
+### Required
+
+BOT: The token for the discord bot.
+
+```node
+BOT="123456" node main.js
+```
 
 # Client config
 
 Edit the variables in the top of the plugin.
 
-domain: Domain Name of the server
-
-peerPort: Port for the peerjs server (Default: 9000)
-
-wsPort: Port for the http server and websocket server (Default: 9001)
+domain: Domain Name of the media serv
 
 # Upcoming Features
 
-* Better Autoupdate
-* Better video placement
-* Disconnect detection
-* Webcam Support
+- [x] Better Autoupdate
+- [x] Disconnect detection
+- [ ] Webcam Support
+- [ ] Better video placement
 
 # Libraries Used
 
 * [Better Discord](https://github.com/Jiiks/BetterDiscordApp)
-* [BetterAPI](https://github.com/Bluscream/BetterDiscord-Plugins-and-Themes/blob/master/src/plugins/0_BetterAPI.plugin.js)
-* [Reconnecting WebSockets](https://github.com/joewalnes/reconnecting-websocket)
 * [DiscordIO](https://github.com/izy521/discord.io)
-* [PeerJS](http://peerjs.com/)
-* [Letsencrypt CLI](https://github.com/Daplie/letsencrypt-cli)
+* [Bluebird](https://github.com/petkaantonov/bluebird)
+* [Primus](https://github.com/primus/primus)
+* [kurento-client](https://github.com/Kurento/kurento-client-js)
+* [kurento-utils](kurento-client)
+* [adapter.js](https://github.com/webrtc/adapter)
+
+# Problems
+
+If there are any problems please open a issue or pull request if you want to fix the problem.
 
 # Licence
 
 MIT License
 
-Copyright (c) 2016 ConnorTheFox
+Copyright (c) 2017 ConnorTheFox
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
