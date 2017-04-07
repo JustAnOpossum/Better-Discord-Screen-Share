@@ -99,9 +99,9 @@ node main.js --chatID=123456
 
 ### Optional
 
-kurento: A ws url to the kurento media server. Default: ws://localhost/kurento:8888
+kurento: A ws url to the kurento media server. Only change if your server is on another computer. Default: ws://localhost:8888/kurento
 ```node
-node main.js --kurento=ws://example.com/kurento:8888
+node main.js --kurento=ws://example.com:8888/kurento
 ```
 
 ## Environment Vars
