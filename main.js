@@ -32,6 +32,10 @@ const wssServer = primus.createServer({
    pathname: '/ssws'
 })
 
+bot.on('ready', function(){
+  bot.sendMessage({ to: chatID, message: ' is now sharing their screen!' })
+})
+
 wssServer.on('connection', spark => {
   console.log('Got connection')
    fs.readFile('html/screenShare.plugin.js', 'utf8', (err, localPlugin) => {
