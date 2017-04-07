@@ -13,7 +13,6 @@ let users = {}
 let share = false
 let shareID
 
-const kurentoWS = argv.kurento || 'ws://localhost:8888/kurento'
 const chatID = argv.chatID
 let token
 if (!process.env.BOT) {
@@ -53,7 +52,7 @@ wssServer.on('connection', spark => {
             }
          }
          if (msg.type === 'share' && !share) {
-            mediaServer = kurento(kurentoWS)
+            mediaServer = kurento('ws://localhost:8888/kurento')
             shareID = spark.id
             users[spark.id] = new user('share', msg.username)
             startShare(spark, msg.offer, spark.id)

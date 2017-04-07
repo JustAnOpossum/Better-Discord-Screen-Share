@@ -72,8 +72,12 @@ location /screenshare {
 
 # Set Up The Server
 
-1. Run npm install in the screenshare directory.
-2. Run npm start. (And with optional command args)
+Run these from the screenshare folder. And run the file with the command arguments
+
+```bash
+npm install
+BOT="1234" node main.js --chatID=1234
+```
 
 # How to Set up the Plugin
 
@@ -96,14 +100,6 @@ chatID: The chat is for the group the bot is going to be in.
 node main.js --chatID=123456
 ```
 
-
-### Optional
-
-kurento: A ws url to the kurento media server. Only change if your server is on another computer. Default: ws://localhost:8888/kurento
-```node
-node main.js --kurento=ws://example.com:8888/kurento
-```
-
 ## Environment Vars
 
 ### Required
@@ -118,7 +114,7 @@ BOT="123456" node main.js
 
 Edit the variables in the top of the plugin.
 
-domain: Domain Name of the media serv
+domain: Domain Name of the server.
 
 # Upcoming Features
 
