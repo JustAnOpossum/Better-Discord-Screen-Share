@@ -4,7 +4,17 @@ This is a plugin and server for the plugin for Better Discord that lets you shar
 
 DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 
-![Example:](https://s16.postimg.org/jp7ptckj9/Picture.png)
+[![Picture.png](https://s11.postimg.org/4oq3juv4j/Picture.png)](https://postimg.org/image/apnsgxhqn/)
+
+# Usage
+
+Click the screenshare button in the top right corner to start and stop the screen share. The video will appear in the chat and only in the one that it was started in.
+
+# Known Bugs
+
+1. Sometimes the video will be blank, I have put a self correcting function into the server but it does not work 100% of the time.
+
+2. The media server has a memory leak, so every time that the screen share stops it will restart kurento. That's why there is a sudo password environment variable.
 
 # Client Requirements
 
@@ -24,6 +34,13 @@ DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 
 Install [Certbot](https://certbot.eff.org/#ubuntuxenial-nginx) and follow the prompts for getting a certificate
 
+```bash
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt update
+sudo apt install certbot
+sudo certbot certonly
+```
+
 # Set up Kurento Server
 
 This is the server that relays the video to the users.
@@ -41,8 +58,8 @@ Replace "Version" with whatever version of ubuntu you are on.
 ```bash
 echo "deb http://ubuntu.kurento.org VERSION kms6" | sudo tee /etc/apt/sources.list.d/kurento.list
 wget -O - http://ubuntu.kurento.org/kurento.gpg.key | sudo apt-key add -
-sudo apt-get update
-sudo apt-get install kurento-media-server-6.0
+sudo apt update
+sudo apt install kurento-media-server-6.0
 sudo service kurento-media-server-6.0 start
 ```
 
@@ -76,7 +93,8 @@ Run these from the screenshare folder. And run the file with the command argumen
 
 ```bash
 npm install
-BOT="1234" node main.js --chatID=1234
+sudo chmod +x restart.sh
+BOT="123456" CHATID="123456" PASS="password" ADMIN="user1user2" SUDO="password" node main.js
 ```
 
 # How to Set up the Plugin
@@ -88,40 +106,35 @@ BOT="1234" node main.js --chatID=1234
 
 # Server Options
 
-## Command Like Options
-
-Run the server with these options to change the options.
-
-### Required
-
-chatID: The chat is for the group the bot is going to be in.
-
-```node
-node main.js --chatID=123456
-```
-
-## Environment Vars
+## Environment Variables
 
 ### Required
 
 BOT: The token for the discord bot.
 
-```node
-BOT="123456" node main.js
-```
+CHATID: Channel ID for the channel the bot is going to be in
 
-# Client config
+PASS: Password for the WS server. (Automatically inserted to the client)
 
-Edit the variables in the top of the plugin.
+SUDO: Password for sudo to restart kurento after someone has stop sharing.
+
+### Optional
+
+ADMIN: String of users who can stop and start the screen share.
+
+# Client Configuration
+
+Edit the variable at the top of the plugin.
 
 domain: Domain Name of the server.
+
+Then give the file to all the people who are going to be using it.
 
 # Upcoming Features
 
 - [x] Better Autoupdate
 - [x] Disconnect detection
 - [ ] Webcam Support
-- [ ] Better video placement
 
 # Libraries Used
 
@@ -130,12 +143,12 @@ domain: Domain Name of the server.
 * [Bluebird](https://github.com/petkaantonov/bluebird)
 * [Primus](https://github.com/primus/primus)
 * [kurento-client](https://github.com/Kurento/kurento-client-js)
-* [kurento-utils](kurento-client)
+* [kurento-utils](https://github.com/Kurento/kurento-utils-js)
 * [adapter.js](https://github.com/webrtc/adapter)
 
 # Problems
 
-If there are any problems please open a issue or pull request if you want to fix the problem.
+If there are any problems please open a issue so I can fix it.
 
 # Licence
 

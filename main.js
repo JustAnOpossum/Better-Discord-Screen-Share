@@ -5,20 +5,29 @@ const Promise = require('bluebird')
 const kurento = require('kurento-client')
 const crypto = require('crypto')
 const fs = require('fs')
-const argv = require('minimist')(process.argv.slice(2))
+const child = require('child_process')
 Promise.promisifyAll(fs)
 let mediaServer
 
 let users = {}
 let share = false
 let shareID
+let messageID
 
-const chatID = argv.chatID
+let chatID
+let password
 let token
-if (!process.env.BOT) {
-   throw new Error('Enter A Bot Token')
+let sudoPassword
+let errorCalled = false
+const admin = (process.env.ADMIN || '')
+
+if (!process.env.BOT || !process.env.CHATID || !process.env.PASS) {
+   throw new Error('Enter All The Required Environment Variables')
 } else {
    token = process.env.BOT
+   chatID = process.env.CHATID
+   password = process.env.PASS
+   sudoPassword = process.env.SUDO
 }
 
 const bot = new Discord.Client({
@@ -29,11 +38,14 @@ const bot = new Discord.Client({
 const wssServer = primus.createServer({
    port: 8006,
    iknowhttpsisbetter: true,
-   pathname: '/ssws'
+   pathname: '/ssws',
+   passphrase: password
 })
 
+wssServer.save(__dirname + '/html/primus.js')
+
 wssServer.on('connection', spark => {
-  console.log('Got connection')
+   console.log('Got connection')
    fs.readFile('html/screenShare.plugin.js', 'utf8', (err, localPlugin) => {
       let localHash = crypto.createHash('sha256').update(localPlugin).digest('hex')
       if (localHash != spark.query.version) {
@@ -48,21 +60,30 @@ wssServer.on('connection', spark => {
                spark.write({ type: 'startShare' })
             }
             if (share) {
-               stop(spark)
+               stop(spark, false)
             }
          }
          if (msg.type === 'share' && !share) {
-            mediaServer = kurento('ws://localhost:8888/kurento')
-            shareID = spark.id
-            users[spark.id] = new user('share', msg.username)
-            startShare(spark, msg.offer, spark.id)
+            bot.sendMessage({ to: chatID, message: msg.username + ' is now sharing their screen!' }, (err, message) => {
+               messageID = message.id
+               mediaServer = kurento('ws://localhost:8888/kurento')
+               shareID = spark.id
+               users[spark.id] = new user('share', msg.username, spark)
+               startShare(spark, msg.offer, spark.id)
+            })
          }
          if (msg.type === 'view' && share) {
-            users[spark.id] = new user('view', msg.username)
+            users[spark.id] = new user('view', msg.username, spark)
             startView(spark, msg.offer, spark.id)
          }
          if (msg.type === 'ice' && share) {
             onIceCandidate(msg.ice, spark.id)
+         }
+         if (msg.type === 'error' && share) {
+            if (!errorCalled) {
+               errorCalled = true
+               stop(spark, false, true)
+            }
          }
       })
       spark.on('end', () => {
@@ -74,8 +95,7 @@ wssServer.on('connection', spark => {
 })
 
 function startShare(spark, offer, id) {
-  console.log('Starting Share')
-   bot.sendMessage({ to: chatID, message: users[id].username + ' is now sharing their screen!' })
+   console.log('Starting Share')
    let pipeline = mediaServer.create('MediaPipeline')
    users[id].pipeline = pipeline
    let endpoint = pipeline.create('WebRtcEndpoint')
@@ -111,7 +131,7 @@ function startShare(spark, offer, id) {
 }
 
 function startView(spark, offer, id) {
-  console.log('Starting View')
+   console.log('Starting View')
    let endpoint = users[shareID].pipeline.create('WebRtcEndpoint')
    users[id].endpoint = endpoint
    users[id].ice.forEach(ice => {
@@ -157,30 +177,43 @@ function onIceCandidate(_ice, id) {
    }
 }
 
-function user(type, username) {
+function user(type, username, spark) {
    this.type = type
    this.ice = []
    this.endpoint = null
    this.pipeline = null
-   this.spark = null
+   this.spark = spark
    this.username = username
 }
 
-function stop(spark, disconnect) {
-      if (spark.id === shareID) {
-         stopAll()
-      } else {
-         users[spark.id].endpoint.release()
-      }
+function stop(spark, disconnect, error) {
+   if (spark.id === shareID || (admin.search(users[spark.id].username) != -1 && !disconnect) || error) {
+      stopAll()
+   } else {
+      users[spark.id].endpoint.release()
+      delete users[spark.id]
+   }
 
    function stopAll() {
-      let id = spark.id
+      let shareSpark = users[shareID].spark
       wssServer.write({ type: 'stop' })
       users[shareID].pipeline.release()
       mediaServer.close()
       share = false
       users = {}
       shareID = null
+      setTimeout(function() {
+        child.exec('./restart.sh ' + sudoPassword, (err, stdout, out) => {
+          if (error) {
+            console.log('called')
+             shareSpark.write({type:'startShare'})
+             error = false
+             bot.deleteMessage({ channelID: chatID, messageID: messageID })
+          } else {
+             bot.deleteMessage({ channelID: chatID, messageID: messageID })
+          }
+        })
+      }, 2000)
    }
 }
 

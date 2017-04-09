@@ -18,9 +18,12 @@ let sharing = false
 let reconnecting = true
 let remoteHash
 let localHash
-let pendingUpdate = false
+let pendingUpdate = { file: null, status: false }
 let i
 let isShare = false
+let guildText
+let click = true
+let checkForVideos
 const { desktopCapturer } = require('electron')
 const crypto = require('crypto')
 const request = require('request')
@@ -45,21 +48,36 @@ screenShare.prototype.ready = function() {
    primus = Primus.connect(`${domain}${wspath}/?version=${localHash}`)
    $('.header-toolbar').prepend('<button id="screenshare" type="button" style="background-image:url(' + domain + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
    setInterval(() => {
-      if (!$('#screenshare')) {
+      if (!$('#screenshare').length) {
          $('.header-toolbar').prepend('<button id="screenshare" type="button" style="background-image:url(' + domain + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
+      }
+      if (isShare && $('.guild-header').text() === guildText && !$('#ssvideo').length) {
+         if (sharing) {
+            $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'src=" + URL.createObjectURL(mediaStream) + ">")
+         } else {
+            $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'src=" + webRtcPeer.remoteVideo.src + ">")
+         }
       }
    }, 10000)
    let mainFunc = this
    $('#screenshare').click(() => {
-      if (pendingUpdate) {
+      if (pendingUpdate.status) {
          let updateOrNot = confirm('Would you like to update now?\nCancel: start share screen\nOK: Update Now')
          if (updateOrNot) {
-            window.location.reload()
+            fs.writeFile(pluginPath, pendingUpdate.file, (err, wrote) => {
+               if (!err) {
+                  window.location.reload()
+               }
+            })
          } else {
             primus.write({ type: 'button' })
          }
       } else {
-         primus.write({ type: 'button' })
+         if (click) {
+            primus.write({ type: 'button' })
+            click = false
+            setTimeout(function() { click = true }, 3000)
+         }
       }
    })
    primus.on('data', msg => {
@@ -70,24 +88,24 @@ screenShare.prototype.ready = function() {
          webRtcPeer.processAnswer(msg.answer)
       }
       if (msg.type === 'viewAccepted') {
+        console.log('view accepted')
          webRtcPeer.processAnswer(msg.answer)
       }
       if (msg.type === 'stop') {
+        console.log('called stop')
          mainFunc.stopScreen()
       }
       if (msg.type === 'startView') {
+        console.log('called start view')
          mainFunc.startView()
       }
       if (msg.type === 'startShare') {
          mainFunc.startShare()
       }
       if (msg.type === 'update') {
-         fs.writeFile(pluginPath, msg.file, (err, wrote) => {
-            if (!err) {
-               $('#screenshare').css({ 'background-image': 'url(' + domain + staticpath + '/iconUpdate.png)' })
-               pendingUpdate = true
-            }
-         })
+         pendingUpdate.status = true
+         pendingUpdate.file = msg.file
+         $('#screenshare').css({ 'background-image': 'url(' + domain + staticpath + '/iconUpdate.png)' })
       }
    })
    primus.on('reconnect', () => {
@@ -102,6 +120,7 @@ screenShare.prototype.ready = function() {
 }
 
 screenShare.prototype.startShare = function() {
+   guildText = $('.guild-header').text()
    let main = this
    desktopCapturer.getSources({ types: ['screen'] }, (error, sources) => {
       if (error) throw error
@@ -154,6 +173,8 @@ screenShare.prototype.startShare = function() {
 }
 
 screenShare.prototype.startView = function() {
+   isShare = true
+   guildText = $('.guild-header').text()
    $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'>")
    let video = document.getElementById('ssvideo')
    let main = this
@@ -161,6 +182,13 @@ screenShare.prototype.startView = function() {
       onicecandidate: main.onIceCandidate,
       remoteVideo: video
    }
+   checkForVideos = setInterval(() => {
+      try {
+         webRtcPeer.currentFrame
+      } catch (e) {
+         primus.write({ type: 'error' })
+      }
+   }, 5000)
 
    webRtcPeer = kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options, function(error) {
       if (error) console.log(err)
@@ -174,7 +202,6 @@ screenShare.prototype.startView = function() {
                offer: offer,
                username: $('.username').text()
             }
-            isShare = true
             primus.write(message)
          }
       })
@@ -191,8 +218,12 @@ screenShare.prototype.onIceCandidate = function(candidate) {
 
 screenShare.prototype.onSwitch = function() {
    if (i === 1) {
-      if (isShare === true) {
-         $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'src=" + (webRtcPeer.remoteVideo.src || mediaStream) + ">")
+      if (isShare && $('.guild-header').text() === guildText) {
+         if (sharing) {
+            $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'src=" + URL.createObjectURL(mediaStream) + ">")
+         } else {
+            $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'src=" + webRtcPeer.remoteVideo.src + ">")
+         }
       }
       i = 0
    } else {
@@ -201,6 +232,7 @@ screenShare.prototype.onSwitch = function() {
 }
 
 screenShare.prototype.stopScreen = function() {
+   clearInterval(checkForVideos)
    webRtcPeer.dispose()
    webRtcPeer = null
    isShare = false
