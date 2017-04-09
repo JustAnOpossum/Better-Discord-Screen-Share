@@ -101,8 +101,10 @@ BOT="123456" CHATID="123456" PASS="password" ADMIN="user1user2" SUDO="password" 
 
 1. Download Better Discord and install.
 2. Extract screenShare.plugin.js to %appdata%\BetterDiscord\Plugins (or ~/Library/Preferences/BetterDiscord/plugins for OSX)
-3. Enable plugin in Better Discord.
-4. Use the button in the top right corner to start and stop screen share.
+3. Edit domain varibale near the top of the plugin.
+4. Distribute plugin to everyone who will use it.
+5. Enable plugin in Better Discord.
+6. Use the button in the top right corner to start and stop screen share.
 
 # Server Options
 
@@ -124,11 +126,7 @@ ADMIN: String of users who can stop and start the screen share.
 
 # Client Configuration
 
-Edit the variable at the top of the plugin.
-
 domain: Domain Name of the server.
-
-Then give the file to all the people who are going to be using it.
 
 # Upcoming Features
 
