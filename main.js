@@ -37,7 +37,7 @@ const bot = new Discord.Client({
 
 const wssServer = primus.createServer({
    port: 8006,
-   iknowhttpsisbetter: true,
+   iknowhttpsisbetter: true, //PLEASE run this behind a reverse proxy
    pathname: '/ssws',
    passphrase: password
 })
@@ -47,7 +47,7 @@ wssServer.save(__dirname + '/html/primus.js')
 wssServer.on('connection', spark => {
    console.log('Got connection')
    fs.readFile('html/screenShare.plugin.js', 'utf8', (err, localPlugin) => {
-      let localHash = crypto.createHash('sha256').update(localPlugin).digest('hex')
+      let localHash = crypto.createHash('sha256').update(localPlugin).digest('hex') //Helps checks for clinet file updates
       if (localHash != spark.query.version) {
          spark.write({ type: 'update', file: localPlugin })
       }
@@ -94,7 +94,7 @@ wssServer.on('connection', spark => {
    })
 })
 
-function startShare(spark, offer, id) {
+function startShare(spark, offer, id) { //Function for starting the screen share
    console.log('Starting Share')
    let pipeline = mediaServer.create('MediaPipeline')
    users[id].pipeline = pipeline
@@ -130,7 +130,7 @@ function startShare(spark, offer, id) {
    })
 }
 
-function startView(spark, offer, id) {
+function startView(spark, offer, id) { //Function for starting view
    console.log('Starting View')
    let endpoint = users[shareID].pipeline.create('WebRtcEndpoint')
    users[id].endpoint = endpoint
@@ -177,7 +177,7 @@ function onIceCandidate(_ice, id) {
    }
 }
 
-function user(type, username, spark) {
+function user(type, username, spark) { //Create a user
    this.type = type
    this.ice = []
    this.endpoint = null
@@ -203,9 +203,8 @@ function stop(spark, disconnect, error) {
       users = {}
       shareID = null
       setTimeout(function() {
-        child.exec('./restart.sh ' + sudoPassword, (err, stdout, out) => {
-          if (error) {
-            console.log('called')
+        child.exec('./restart.sh ' + sudoPassword, (err, stdout, out) => { //Needed since Kurento has memory leaks.
+          if (error) { //Error is passed if there is no video on the client side. So startShare is called again.
              shareSpark.write({type:'startShare'})
              error = false
              bot.deleteMessage({ channelID: chatID, messageID: messageID })

@@ -76,7 +76,7 @@ screenShare.prototype.ready = function() {
          if (click) {
             primus.write({ type: 'button' })
             click = false
-            setTimeout(function() { click = true }, 3000)
+            setTimeout(function() { click = true }, 3000) //Someone cant spam the button
          }
       }
    })
@@ -88,15 +88,12 @@ screenShare.prototype.ready = function() {
          webRtcPeer.processAnswer(msg.answer)
       }
       if (msg.type === 'viewAccepted') {
-        console.log('view accepted')
          webRtcPeer.processAnswer(msg.answer)
       }
       if (msg.type === 'stop') {
-        console.log('called stop')
          mainFunc.stopScreen()
       }
       if (msg.type === 'startView') {
-        console.log('called start view')
          mainFunc.startView()
       }
       if (msg.type === 'startShare') {
@@ -217,7 +214,7 @@ screenShare.prototype.onIceCandidate = function(candidate) {
 }
 
 screenShare.prototype.onSwitch = function() {
-   if (i === 1) {
+   if (i === 1) { //Bug when this is called multiple times
       if (isShare && $('.guild-header').text() === guildText) {
          if (sharing) {
             $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'src=" + URL.createObjectURL(mediaStream) + ">")
