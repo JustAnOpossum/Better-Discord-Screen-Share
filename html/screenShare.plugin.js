@@ -182,6 +182,7 @@ screenShare.prototype.startView = function() {
    checkForVideos = setInterval(() => {
       try {
          webRtcPeer.currentFrame
+         clearInterval(checkForVideos)
       } catch (e) {
          primus.write({ type: 'error' })
       }
