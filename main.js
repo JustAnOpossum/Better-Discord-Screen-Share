@@ -13,6 +13,7 @@ let users = {}
 let share = false
 let shareID
 let messageID
+let guild
 
 let chatID
 let password
@@ -37,7 +38,7 @@ const bot = new Discord.Client({
 
 const wssServer = primus.createServer({
    port: 8006,
-   iknowhttpsisbetter: true, //PLEASE run this behind a reverse proxy
+   iknowhttpsisbetter: true,
    pathname: '/ssws',
    passphrase: password
 })
@@ -47,12 +48,12 @@ wssServer.save(__dirname + '/html/primus.js')
 wssServer.on('connection', spark => {
    console.log('Got connection')
    fs.readFile('html/screenShare.plugin.js', 'utf8', (err, localPlugin) => {
-      let localHash = crypto.createHash('sha256').update(localPlugin).digest('hex') //Helps checks for clinet file updates
+      let localHash = crypto.createHash('sha256').update(localPlugin).digest('hex')
       if (localHash != spark.query.version) {
          spark.write({ type: 'update', file: localPlugin })
       }
       if (share) {
-         spark.write({ type: 'startView' })
+         spark.write({ type: 'startView', guild: guild })
       }
       spark.on('data', msg => {
          if (msg.type === 'button') {
@@ -69,6 +70,7 @@ wssServer.on('connection', spark => {
                mediaServer = kurento('ws://localhost:8888/kurento')
                shareID = spark.id
                users[spark.id] = new user('share', msg.username, spark)
+               guild = msg.guild
                startShare(spark, msg.offer, spark.id)
             })
          }
@@ -79,11 +81,8 @@ wssServer.on('connection', spark => {
          if (msg.type === 'ice' && share) {
             onIceCandidate(msg.ice, spark.id)
          }
-         if (msg.type === 'error' && share) {
-            if (!errorCalled) {
-               errorCalled = true
-               stop(spark, false, true)
-            }
+         if (msg.type === 'stop') {
+            stop(spark, false)
          }
       })
       spark.on('end', () => {
@@ -94,7 +93,7 @@ wssServer.on('connection', spark => {
    })
 })
 
-function startShare(spark, offer, id) { //Function for starting the screen share
+function startShare(spark, offer, id) {
    console.log('Starting Share')
    let pipeline = mediaServer.create('MediaPipeline')
    users[id].pipeline = pipeline
@@ -125,12 +124,12 @@ function startShare(spark, offer, id) { //Function for starting the screen share
    share = true
    wssServer.forEach((spark, id) => {
       if (id != shareID) {
-         spark.write({ type: 'startView' })
+         spark.write({ type: 'startView', guild: guild })
       }
    })
 }
 
-function startView(spark, offer, id) { //Function for starting view
+function startView(spark, offer, id) {
    console.log('Starting View')
    let endpoint = users[shareID].pipeline.create('WebRtcEndpoint')
    users[id].endpoint = endpoint
@@ -177,7 +176,7 @@ function onIceCandidate(_ice, id) {
    }
 }
 
-function user(type, username, spark) { //Create a user
+function user(type, username, spark) {
    this.type = type
    this.ice = []
    this.endpoint = null
@@ -186,8 +185,8 @@ function user(type, username, spark) { //Create a user
    this.username = username
 }
 
-function stop(spark, disconnect, error) {
-   if (spark.id === shareID || (admin.search(users[spark.id].username) != -1 && !disconnect) || error) {
+function stop(spark, disconnect) {
+   if (disconnect && spark.id === shareID || admin.search(users[spark.id].username) != -1 && !disconnect || spark.id === shareID) {
       stopAll()
    } else {
       users[spark.id].endpoint.release()
@@ -203,16 +202,10 @@ function stop(spark, disconnect, error) {
       users = {}
       shareID = null
       setTimeout(function() {
-        child.exec('./restart.sh ' + sudoPassword, (err, stdout, out) => { //Needed since Kurento has memory leaks.
-          if (error) { //Error is passed if there is no video on the client side. So startShare is called again.
-             shareSpark.write({type:'startShare'})
-             error = false
-             bot.deleteMessage({ channelID: chatID, messageID: messageID })
-          } else {
-             bot.deleteMessage({ channelID: chatID, messageID: messageID })
-          }
-        })
-      }, 2000)
+         child.exec('./restart.sh ' + sudoPassword, (err, stdout, out) => {
+            bot.deleteMessage({ channelID: chatID, messageID: messageID })
+         })
+      }, 1500)
    }
 }
 
