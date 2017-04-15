@@ -43,7 +43,7 @@ then
   service nginx reload
   certbot certonly --webroot -w /var/www/certbot -d $1
   sed -i "s/#/ /g" /etc/nginx/sites-available/$1.conf
-  sed -i "s|AUTHDIR|$PWD/$6|g" /etc/nginx/sites-available/$1.conf
+  sed -i "s|AUTH|$PWD|g" /etc/nginx/sites-available/$1.conf
   service nginx reload
 fi
 
