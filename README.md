@@ -20,10 +20,17 @@ Click the screenshare button in the top right corner to start and stop the scree
 
 # Automatic Installer
 
+## Before you start
+
+Make sure you are on Ubuntu 14 or 16.04 since this will not work with any other version.
+
+## Installer
+
 Run my automatic installer to install the dependencies, set up nginx, and generate a certificate. If there are any errors please contact me at support@nerdfox.me or open an issue.
 
 1. Run the command below and substitute the variables with the information.
-2. use sudo "systemctl [start, stop, restart] screenshare" to control the server.
+2. When it generates the certificate, follow the prompts.
+3. use sudo "systemctl [start, stop, restart] screenshare" to control the server.
 
 `sudo ./install.sh domain botToken chatID admins sudoPassword httpPassword user group`
 
@@ -40,6 +47,10 @@ httpPassword: This is the password for the http authentication.
 user: User the server will run as
 
 group: Group the server will run as.
+
+## After
+
+To change any of these variable re-run the installer.
 
 # Manual Install
 
