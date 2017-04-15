@@ -54,7 +54,7 @@ To change any of these variable re-run the installer.
 
 # Manual Install
 
-See [Manual Install](MANUAL.MD) if you want to manually install the server.
+See [Manual Install](MANUAL.md) if you want to manually install the server.
 
 # Upcoming Features
 
