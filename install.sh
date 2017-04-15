@@ -20,6 +20,12 @@ then
   release='yakkety'
 fi
 
+check17=`echo $V | grep '17'`
+if [ "$check1610" != '' ]
+then
+  release='zesty'
+fi
+
 if [ ! -f /usr/bin/node ] || [ ! -f /usr/bin/git ] || [ ! -f /usr/bin/curl ] || [ ! -f /usr/bin/add-apt-repository ]
 then
   apt update && apt install -y curl software-properties-common git
