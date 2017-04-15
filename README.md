@@ -34,6 +34,8 @@ Run my automatic installer to install the dependencies, set up nginx, and genera
 
 `sudo ./install.sh domain botToken chatID admins sudoPassword httpPassword user group`
 
+domain: The domain name of the server, if you dont have one use [DuckDNS](https://www.duckdns.org/)
+
 botToken: This is the token for the discord bot
 
 ChatID: This is the ID for the chat the bot will be in. To get it [follow this tutorial.](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-server-ID-)
