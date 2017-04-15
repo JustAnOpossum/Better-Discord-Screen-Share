@@ -71,3 +71,5 @@ $RECYCLE.BIN/
 node_modules
 start.sh
 .htpasswd
+html/primus.js
+html/creenShare.plugin.js
