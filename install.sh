@@ -53,7 +53,7 @@ chmod -R 755 html
 chown -R $SUDO_USER html
 chmod +x restart.sh
 htpasswd -b -c passdw screenshare $6
-sed "s|PATH|$PWD|g; s/EBOT/$2/g; s/ECHATID/$3/g; s/EADMIN/$4/g; s/ESUDO/$5/g; s/EPASSHTTP/$6/g; s/EDOMAIN/$1/g; s/PUSERNAME/$7/g; s/PGROUP/$8/g" serviceBase.service | tee test.service
+sed "s|PATH|$PWD|g; s/EBOT/$2/g; s/ECHATID/$3/g; s/EADMIN/$4/g; s/ESUDO/$5/g; s/EPASSHTTP/$6/g; s/EDOMAIN/$1/g; s/PUSERNAME/$7/g; s/PGROUP/$8/g" serviceBase.service | tee /etc/systemd/system/screenshare.service
 systemctl daemon-reload
 systemctl start screenshare
 systemctl enable screenshare
