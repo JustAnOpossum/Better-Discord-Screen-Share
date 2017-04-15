@@ -19,17 +19,25 @@ let chatID
 let password
 let token
 let sudoPassword
+let domain
 let errorCalled = false
 const admin = (process.env.ADMIN || '')
 
-if (!process.env.BOT || !process.env.CHATID || !process.env.PASS) {
+if (!process.env.BOT || !process.env.CHATID || !process.env.PASS || !process.env.DOMAIN) {
    throw new Error('Enter All The Required Environment Variables')
 } else {
    token = process.env.BOT
    chatID = process.env.CHATID
    password = process.env.PASS
    sudoPassword = process.env.SUDO
+   domain = process.env.DOMAIN
 }
+
+child.exec('sed "s/PLACEHOLDER/' + domain + '/g" html/template.js > html/screenShare.plugin.js', (err, stdout, out) => {
+   if (err) {
+      throw new Error(err)
+   }
+})
 
 const bot = new Discord.Client({
    token: token,
