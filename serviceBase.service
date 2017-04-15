@@ -1,0 +1,19 @@
+[Unit]
+Description=Screenshare
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node PATH/main.js
+Restart=always
+User=PUSERNAME
+Group=PGROUP
+WorkingDirectory=PATH
+Environment=BOT=EBOT
+Environment=CHATID=ECHATID
+Environment=ADMIN=EADMIN
+Environment=SUDO=ESUDO
+Environment=PASSHTTP=EPASSHTTP
+Environment=DOMAIN=EDOMAIN
+
+[Install]
+WantedBy=multi-user.target

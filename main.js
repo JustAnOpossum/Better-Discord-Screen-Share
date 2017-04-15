@@ -16,27 +16,27 @@ let messageID
 let guild
 
 let chatID
-let password
 let token
 let sudoPassword
 let domain
+let httpPassword
 let errorCalled = false
 const admin = (process.env.ADMIN || '')
 
-if (!process.env.BOT || !process.env.CHATID || !process.env.PASS || !process.env.DOMAIN) {
+if (!process.env.BOT || !process.env.CHATID || !process.env.DOMAIN || !process.env.PASSHTTP) {
    throw new Error('Enter All The Required Environment Variables')
 } else {
    token = process.env.BOT
    chatID = process.env.CHATID
-   password = process.env.PASS
    sudoPassword = process.env.SUDO
    domain = process.env.DOMAIN
+   httpPassword = process.env.PASSHTTP
 }
 
-child.exec('sed "s/PLACEHOLDER/' + domain + '/g" html/template.js > html/screenShare.plugin.js', (err, stdout, out) => {
-   if (err) {
-      throw new Error(err)
-   }
+child.exec('sed "s/PLACEHOLDER/' + domain + '/g; s/USERPLACE/screenshare/g; s/PASSPLACE/'+httpPassword+'/g" html/template.js > html/screenShare.plugin.js', (err, stdout, out) => {
+  if (err) {
+     throw new Error(err)
+  }
 })
 
 const bot = new Discord.Client({
@@ -47,8 +47,7 @@ const bot = new Discord.Client({
 const wssServer = primus.createServer({
    port: 8006,
    iknowhttpsisbetter: true,
-   pathname: '/ssws',
-   passphrase: password
+   pathname: '/ssws'
 })
 
 wssServer.save(__dirname + '/html/primus.js')
@@ -194,27 +193,32 @@ function user(type, username, spark) {
 }
 
 function stop(spark, disconnect) {
-   if (disconnect && spark.id === shareID || admin.search(users[spark.id].username) != -1 && !disconnect || spark.id === shareID) {
-      stopAll()
-   } else {
-      users[spark.id].endpoint.release()
-      delete users[spark.id]
-   }
+  try {
+    if (disconnect && spark.id === shareID || admin.search(users[spark.id].username) != -1 && !disconnect || spark.id === shareID) {
+       stopAll()
+    } else {
+       users[spark.id].endpoint.release()
+       delete users[spark.id]
+    }
 
-   function stopAll() {
-      let shareSpark = users[shareID].spark
-      wssServer.write({ type: 'stop' })
-      users[shareID].pipeline.release()
-      mediaServer.close()
-      share = false
-      users = {}
-      shareID = null
-      setTimeout(function() {
-         child.exec('./restart.sh ' + sudoPassword, (err, stdout, out) => {
-            bot.deleteMessage({ channelID: chatID, messageID: messageID })
-         })
-      }, 1500)
-   }
+    function stopAll() {
+       let shareSpark = users[shareID].spark
+       wssServer.write({ type: 'stop' })
+       users[shareID].pipeline.release()
+       mediaServer.close()
+       share = false
+       users = {}
+       shareID = null
+       setTimeout(function() {
+          child.exec('./restart.sh ' + sudoPassword, (err, stdout, out) => {
+             bot.deleteMessage({ channelID: chatID, messageID: messageID })
+          })
+       }, 1500)
+    }  
+  }
+  catch(e) {
+    console.log(e)
+  }
 }
 
 console.log('Web Socket server listening on port 8006 on localhost')

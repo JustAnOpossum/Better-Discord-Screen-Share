@@ -2,6 +2,9 @@
 let screenShare = function() {}
 
 const domain = 'PLACEHOLDER'
+const user = 'USERPLACE'
+const password = 'PASSPLACE'
+const httpAuthPath = `https://${user}:${password}@${domain}`
 const wspath = '/ssws'
 const staticpath = '/screenshare'
 let pluginPath
@@ -52,14 +55,14 @@ function buttonClick() {
 }
 
 screenShare.prototype.start = function() {
-   let t = `${domain}${staticpath}/icon.png`
+   let t = `https://${domain}${staticpath}/icon.png`
    let main = this
    fs.readFile(pluginPath, 'utf8', (err, localfile) => {
       localHash = crypto.createHash('sha256').update(localfile).digest('hex')
       $.when(
-         $.getScript(`${domain}${staticpath}/primus.js`),
-         $.getScript(`${domain}${staticpath}/kurento-utils.min.js`),
-         $.getScript(`${domain}${staticpath}/adapter.js`)
+         $.getScript(`${httpAuthPath}${staticpath}/primus.js`),
+         $.getScript(`${httpAuthPath}${staticpath}/kurento-utils.min.js`),
+         $.getScript(`${httpAuthPath}${staticpath}/adapter.js`)
       ).then(() => {
          main.ready()
       })
@@ -67,11 +70,11 @@ screenShare.prototype.start = function() {
 }
 
 screenShare.prototype.ready = function() {
-   primus = Primus.connect(`${domain}${wspath}/?version=${localHash}`)
-   $('.header-toolbar').prepend('<button onclick="buttonClick()" id="screenshare" type="button" style="background-image:url(' + domain + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
+   primus = Primus.connect(`https://${domain}${wspath}/?version=${localHash}`)
+   $('.header-toolbar').prepend('<button onclick="buttonClick()" id="screenshare" type="button" style="background-image:url(' + httpAuthPath + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
    setInterval(() => {
       if (!$('#screenshare').length) {
-         $('.header-toolbar').prepend('<button id="screenshare" type="button" style="background-image:url(' + domain + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
+         $('.header-toolbar').prepend('<button id="screenshare" type="button" style="background-image:url(' + httpAuthPath + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
       }
       if (isShare && $('.guild-header').text() === guildText && !$('#ssvideo').length) {
          if (sharing) {
@@ -105,7 +108,7 @@ screenShare.prototype.ready = function() {
       if (msg.type === 'update') {
          pendingUpdate.status = true
          pendingUpdate.file = msg.file
-         $('#screenshare').css({ 'background-image': 'url(' + domain + staticpath + '/iconUpdate.png)' })
+         $('#screenshare').css({ 'background-image': 'url(' + httpAuthPath + staticpath + '/iconUpdate.png)' })
       }
    })
    primus.on('reconnect', () => {
@@ -222,7 +225,7 @@ screenShare.prototype.onIceCandidate = function(candidate) {
 screenShare.prototype.onSwitch = function() {
    if (i === 1) {
       if (!$('#screenshare').length) {
-         $('.header-toolbar').prepend('<button onclick="buttonClick()" id="screenshare" type="button" style="background-image:url(' + domain + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
+         $('.header-toolbar').prepend('<button onclick="buttonClick()" id="screenshare" type="button" style="background-image:url(' + httpAuthPath + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
       }
       if (isShare && $('.guild-header').text() === guildText) {
          if (sharing) {

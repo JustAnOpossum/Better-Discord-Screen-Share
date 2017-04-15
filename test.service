@@ -1,0 +1,19 @@
+[Unit]
+Description=Screenshare
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /home/connorthefox/node/screenshare/main.js
+Restart=always
+User=connorthefox
+Group=connorthefox
+WorkingDirectory=/home/connorthefox/node/screenshare
+Environment=BOT=123456
+Environment=CHATID=34567
+Environment=ADMIN=DasfoxDrGaben
+Environment=SUDO=iamafurrr
+Environment=PASSHTTP=spicymemes
+Environment=DOMAIN=nerdfox.me
+
+[Install]
+WantedBy=multi-user.target

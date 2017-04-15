@@ -43,15 +43,27 @@ then
   service nginx reload
   certbot certonly --webroot -w /var/www/certbot -d $1
   sed -i "s/#/ /g" /etc/nginx/sites-available/$1.conf
+  sed -i "s|AUTHDIR|$PWD/$6|g" /etc/nginx/sites-available/$1.conf
   service nginx reload
 fi
 
 npm i
-echo "DOMAIN=$1 BOT=$2 CHATID=$3 PASS=$4 SUDO=$5 node main.js &&  service kurento-media-server-6.0 start" > start.sh
-chmod +x start.sh
 chown -R $SUDO_USER node_modules
-chown -R $SUDO_USER start.sh
 chmod -R 755 html
 chown -R $SUDO_USER html
 chmod +x restart.sh
-./start.sh
+htpasswd -b -c passdw screenshare $6
+sed "s|PATH|$PWD|g; s/EBOT/$2/g; s/ECHATID/$3/g; s/EADMIN/$4/g; s/ESUDO/$5/g; s/EPASSHTTP/$6/g; s/EDOMAIN/$1/g; s/PUSERNAME/$7/g; s/PGROUP/$8/g" serviceBase.service | tee test.service
+systemctl daemon-reload
+systemctl start screenshare
+systemctl enable screenshare
+sleep 4
+
+if [ `systemctl is-active screenshare` = 'active' ]
+then
+  printf 'The screen share server is installed and active, use sudo systemctl [command] screenshare to control it.\nIf any problems occur, email me at support@nerdfox.me\n'
+else
+  systemctl restart screenshare
+  timeout 4 journalctl -u screenshare --follow | tee error.log
+  printf 'An error has occured with launching the server, please send me error.log above to support@nerdfox.me'
+fi
