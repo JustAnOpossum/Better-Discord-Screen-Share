@@ -69,3 +69,5 @@ $RECYCLE.BIN/
 *.lnk
 
 node_modules
+start.sh
+.htpasswd
