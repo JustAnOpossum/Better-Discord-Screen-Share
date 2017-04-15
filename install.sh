@@ -41,6 +41,7 @@ fi
 
 if  [ ! -d /etc/letsencrypt/live/$1 ]
 then
+  mkdir /var/www/
   mkdir /var/www/certbot
   sed "s/DOMAIN/$1/g" nginxBase.conf |  tee /etc/nginx/sites-available/$1.conf
   sed -i "s|DIR|$PWD\/html|g" /etc/nginx/sites-available/$1.conf
