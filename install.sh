@@ -58,4 +58,5 @@ chown -R $SUDO_USER node_modules
 chown -R $SUDO_USER start.sh
 chmod -R 755 html
 chown -R $SUDO_USER html
+chmod +x restart.sh
 ./start.sh
