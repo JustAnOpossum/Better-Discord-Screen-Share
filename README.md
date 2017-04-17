@@ -22,7 +22,7 @@ Click the screenshare button in the top right corner to start and stop the scree
 
 ## Before you start
 
-Make sure you are on Ubuntu 14 or 16.04 since this will not work with any other version.
+Make sure you are on Ubuntu 14 or 16.04 since this will not work with any other version of linux or ubuntu.
 
 ## Installer
 
@@ -30,7 +30,7 @@ Run my automatic installer to install the dependencies, set up nginx, and genera
 
 1. Run the command below and substitute the variables with the information.
 2. When it generates the certificate, follow the prompts.
-3. use sudo "systemctl [start, stop, restart] screenshare" to control the server.
+3. use "sudo systemctl [start, stop, restart] screenshare" to control the server.
 
 `sudo ./install.sh domain botToken chatID admins sudoPassword httpPassword user group`
 
