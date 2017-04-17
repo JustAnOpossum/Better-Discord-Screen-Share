@@ -72,4 +72,4 @@ node_modules
 start.sh
 .htpasswd
 html/primus.js
-html/creenShare.plugin.js
+html/screenShare.plugin.js
