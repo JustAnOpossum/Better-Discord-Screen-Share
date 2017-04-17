@@ -12,7 +12,6 @@
     "bluebird": "^3.5.0",
     "discord.io": "^2.5.1",
     "kurento-client": "^6.6.0",
-    "minimist": "^1.2.0",
     "primus": "^7.0.0",
     "ws": "^2.2.3"
   }
