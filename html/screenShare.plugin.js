@@ -1,9 +1,9 @@
 //META{"name":"screenShare"}*//
 let screenShare = function() {}
 
-const domain = 'PLACEHOLDER'
-const user = 'USERPLACE'
-const password = 'PASSPLACE'
+const domain = 'nerdfox.me'
+const user = 'screenshare'
+const password = 'As8Ak69R3GK3tRE3JmsYSRtzpWpcZC'
 const httpAuthPath = `https://${user}:${password}@${domain}`
 const wspath = '/ssws'
 const staticpath = '/screenshare'

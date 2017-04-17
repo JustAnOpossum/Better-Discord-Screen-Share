@@ -44,6 +44,8 @@ const bot = new Discord.Client({
    autorun: true
 })
 
+
+
 const wssServer = primus.createServer({
    port: 8006,
    iknowhttpsisbetter: true,
