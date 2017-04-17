@@ -1,6 +1,6 @@
 # Better Discord Screen Sharing
 
-This is a plugin and server for the plugin for Better Discord that lets you share your screen. It needs ubuntu for the server.
+This is a plugin and server for the plugin for Better Discord that lets you share your screen.
 
 DISCLAMER: This is untested on OSX but the paths are set up correctly for OSX.
 
@@ -16,117 +16,47 @@ Click the screenshare button in the top right corner to start and stop the scree
 
 2. The media server has a memory leak, so every time that the screen share stops it will restart kurento. That's why there is a sudo password environment variable.
 
-# Client Requirements
+3. When you use the installer Nginx might not start so you have to restart Nginx.
 
-* [Better Discord](https://github.com/Jiiks/BetterDiscordApp)
+# Automatic Installer
 
-# Server Requirements
+## Before you start
 
-* [NodeJS](https://nodejs.org/en/download/)
-* Nginx
-* Linux server with Ubuntu
-* [Discord bot](https://discordapp.com/developers/applications/) to send who is sharing screen to the channel
-* Valid TLS certificate.
-* Domain name (If you don't have one then use [NoIP](https://www.noip.com/))
-* [Kurento Media Server](https://doc-kurento.readthedocs.io/en/stable/what_is_kurento.html)
+Make sure you are on Ubuntu 14 or 16.04 since this will not work with any other version.
 
-# If you Don't Have A TLS Certificate
+## Installer
 
-Install [Certbot](https://certbot.eff.org/#ubuntuxenial-nginx) and follow the prompts for getting a certificate
+Run my automatic installer to install the dependencies, set up nginx, and generate a certificate. If there are any errors please contact me at support@nerdfox.me or open an issue.
 
-```bash
-sudo add-apt-repository ppa:certbot/certbot
-sudo apt update
-sudo apt install certbot
-sudo certbot certonly
-```
+1. Run the command below and substitute the variables with the information.
+2. When it generates the certificate, follow the prompts.
+3. use sudo "systemctl [start, stop, restart] screenshare" to control the server.
 
-# Set up Kurento Server
+`sudo ./install.sh domain botToken chatID admins sudoPassword httpPassword user group`
 
-This is the server that relays the video to the users.
+domain: The domain name of the server, if you dont have one use [DuckDNS](https://www.duckdns.org/)
 
-To use this you NEED to be on ubuntu since Kurento only supports ubuntu.
+botToken: This is the token for the discord bot
 
-Replace "Version" with whatever version of ubuntu you are on.
+ChatID: This is the ID for the chat the bot will be in. To get it [follow this tutorial.](https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-server-ID-)
 
-14.04 - trusty
+admins: A list of users, without spaces that can control the screen sharing in addition to the person who is sharing.
 
-16.04 - xenial
+sudoPassword: This is the password for your user account on your server, I need this to run the script that restarts Kurento.
 
-16.10 - yakkety
+httpPassword: This is the password for the http authentication.
 
-```bash
-echo "deb http://ubuntu.kurento.org VERSION kms6" | sudo tee /etc/apt/sources.list.d/kurento.list
-wget -O - http://ubuntu.kurento.org/kurento.gpg.key | sudo apt-key add -
-sudo apt update
-sudo apt install kurento-media-server-6.0
-sudo service kurento-media-server-6.0 start
-```
+user: User the server will run as
 
-# Setting Up Nginx
+group: Group the server will run as.
 
-1. Add this block to your current site or a new sites, edit the alias for /screenshare to point to where the html folder is.
+## After
 
-```Nginx
-location /ssws {
-    proxy_pass http://localhost:8006;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_buffering off;
-    proxy_connect_timeout 43200000;
-    proxy_read_timeout 43200000;
-    proxy_send_timeout 43200000;
-}
+To change any of these variable re-run the installer.
 
-location /screenshare {
-    alias /path/to/html/folder;
-    add_header 'Access-Control-Allow-Origin' '*';
-}
-```
+# Manual Install
 
-2. Enable TLS
-
-# Set Up The Server
-
-Run these from the screenshare folder. And run the file with the command arguments
-
-```bash
-npm install
-sudo chmod +x restart.sh
-BOT="123456" CHATID="123456" PASS="password" ADMIN="user1user2" SUDO="password" node main.js
-```
-
-# How to Set up the Plugin
-
-1. Download Better Discord and install.
-2. Extract screenShare.plugin.js to %appdata%\BetterDiscord\Plugins (or ~/Library/Preferences/BetterDiscord/plugins for OSX)
-3. Edit domain varibale near the top of the plugin.
-4. Distribute plugin to everyone who will use it.
-5. Enable plugin in Better Discord.
-6. Use the button in the top right corner to start and stop screen share.
-
-# Server Options
-
-## Environment Variables
-
-### Required
-
-BOT: The token for the discord bot.
-
-CHATID: Channel ID for the channel the bot is going to be in
-
-PASS: Password for the WS server. (Automatically inserted to the client)
-
-SUDO: Password for sudo to restart kurento after someone has stop sharing.
-
-### Optional
-
-ADMIN: String of users who can stop and start the screen share.
-
-# Client Configuration
-
-domain: Domain Name of the server.
+See [Manual Install](MANUAL.md) if you want to manually install the server.
 
 # Upcoming Features
 
