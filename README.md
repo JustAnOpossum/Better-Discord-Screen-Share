@@ -22,7 +22,7 @@ Click the screenshare button in the top right corner to start and stop the scree
 
 ## Before you start
 
-Make sure you are on Ubuntu 14 or 16.04 since this will not work with any other version of linux or ubuntu.
+Make sure you are on Ubuntu 14 or 16.04 since this will not work with any other version of linux or ubuntu. This program is made to run on a server thats not on your network. So it might not work if your running this on a computer in your network.
 
 ## Installer
 
