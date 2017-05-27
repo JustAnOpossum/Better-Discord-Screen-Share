@@ -14,9 +14,9 @@ then
   release='xenial'
 fi
 
-if [ ! -f /usr/bin/node ] || [ ! -f /usr/bin/git ] || [ ! -f /usr/bin/curl ] || [ ! -f /usr/bin/add-apt-repository ] || [ ! -f /usr/bin/htpasswd ]
+if [ ! -f /usr/bin/node ] || [ ! -f /usr/bin/git ] || [ ! -f /usr/bin/curl ] || [ ! -f /usr/bin/add-apt-repository ] || [ ! -f /usr/bin/htpasswd || [ ! -f /usr/lib/systemd ]
 then
-  apt update && apt install -y curl software-properties-common git apache2-utils
+  apt update && apt install -y curl software-properties-common git apache2-utils systemd
   service stop apache2
   update-rc.d apache2 disable
   add-apt-repository -y ppa:certbot/certbot
