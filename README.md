@@ -31,6 +31,7 @@ Run my automatic installer to install the dependencies, set up nginx, and genera
 1. Run the command below and substitute the variables with the information.
 2. When it generates the certificate, follow the prompts.
 3. use "sudo systemctl [start, stop, restart] screenshare" to control the server.
+4. Go into the html folder and move ScreenShare.plugin.js to your better discord folder. [Plugin Installer Here](https://github.com/Bluscream/BetterDiscord/releases/download/3/BetterDiscord.Setup.exe)
 
 `sudo ./install.sh domain botToken chatID admins sudoPassword httpPassword user group`
 
