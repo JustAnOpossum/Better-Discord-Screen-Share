@@ -12,7 +12,7 @@ Click the screenshare button in the top right corner to start and stop the scree
 
 # Known Bugs
 
-1. Sometimes the video will be blank, I have put a self correcting function into the server but it does not work 100% of the time.
+1. Sometimes the video will be blank, There is no way I can fix this since the problem is with the media server.
 
 2. The media server has a memory leak, so every time that the screen share stops it will restart kurento. That's why there is a sudo password environment variable.
 
