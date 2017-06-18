@@ -123,7 +123,7 @@ screenShare.prototype.ready = function() {
 }
 
 screenShare.prototype.startShare = function() {
-   guildText = $('.guild-header').text()
+   guildText = $('.name-3gtcmp').text()
    let main = this
    desktopCapturer.getSources({ types: ['screen'] }, (error, sources) => {
       if (error) throw error
