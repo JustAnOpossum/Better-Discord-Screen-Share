@@ -76,7 +76,7 @@ screenShare.prototype.ready = function() {
       if (!$('#screenshare').length) {
          $('.header-toolbar').prepend('<button onclick="buttonClick()" id="screenshare" type="button" style="background-image:url(' + httpAuthPath + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
       }
-      if (isShare && $('.guild-header').text() === guildText && !$('#ssvideo').length) {
+      if (isShare && $('.name-3gtcmp').text() === guildText && !$('#ssvideo').length) {
          if (sharing) {
             $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'src=" + URL.createObjectURL(mediaStream) + ">")
          } else {
@@ -227,7 +227,7 @@ screenShare.prototype.onSwitch = function() {
       if (!$('#screenshare').length) {
          $('.header-toolbar').prepend('<button onclick="buttonClick()" id="screenshare" type="button" style="background-image:url(' + httpAuthPath + staticpath + '/icon.png' + ');background-repeat:no-repeat"></button>')
       }
-      if (isShare && $('.guild-header').text() === guildText) {
+      if (isShare && $('.name-3gtcmp').text() === guildText) {
          if (sharing) {
             $('.message-text').last().append("<video id='ssvideo' autoplay controls muted style='width:100%;height:100%'src=" + URL.createObjectURL(mediaStream) + ">")
          } else {
