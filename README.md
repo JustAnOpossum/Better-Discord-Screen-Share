@@ -20,6 +20,8 @@ Click the screenshare button in the top right corner to start and stop the scree
 
 # Automatic Installer
 
+# As of June 31st I am working on a much simpler installer and server. If you want to wait for that in a couple of weeks.
+
 ## Before you start
 
 Make sure you are on Ubuntu 14 or 16.04 since this will not work with any other version of linux or ubuntu. This program is made to run on a server thats not on your network. So it might not work if your running this on a computer in your network.
