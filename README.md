@@ -1,3 +1,5 @@
+# This is no longer being worked on because discord has added this functionality to discord.
+
 # Better Discord Screen Sharing
 
 This is a plugin and server for the plugin for Better Discord that lets you share your screen.
@@ -19,8 +21,6 @@ Click the screenshare button in the top right corner to start and stop the scree
 3. When you use the installer Nginx might not start so you have to restart Nginx.
 
 # Automatic Installer
-
-# As of June 31st I am working on a much simpler installer and server. If you want to wait for that in a couple of weeks.
 
 ## Before you start
 
